@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KXXN</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --deep: #111111;
+      --yellow: #FFD600;
+      --yellow-dim: #c9a800;
+      --yellow-glow: rgba(255, 214, 0, 0.18);
+      --white: #f5f5f5;
+      --gray: #222222;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: 'Barlow Condensed', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Noise overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.4;
+    }
+
+    /* Diagonal yellow accent stripe */
+    .stripe {
+      position: fixed;
+      top: -10%;
+      right: -5%;
+      width: 6px;
+      height: 130vh;
+      background: var(--yellow);
+      transform: rotate(12deg);
+      opacity: 0.6;
+      z-index: 0;
+    }
+    .stripe2 {
+      position: fixed;
+      top: -10%;
+      right: 2%;
+      width: 2px;
+      height: 130vh;
+      background: var(--yellow);
+      transform: rotate(12deg);
+      opacity: 0.25;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 56px;
+      animation: fadeDown 0.7s ease both;
+    }
+    .header-line {
+      flex: 1;
+      height: 2px;
+      background: var(--yellow);
+    }
+    .header-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--yellow);
+    }
+
+    /* Profile section */
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      animation: fadeUp 0.8s ease 0.1s both;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin-bottom: 32px;
+    }
+    .avatar-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border: 3px solid var(--yellow);
+      clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+      z-index: 1;
+    }
+    .avatar-wrapper::after {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      border: 1px solid var(--yellow-dim);
+      clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+      opacity: 0.4;
+    }
+    .avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: grayscale(20%) contrast(1.1);
+      clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+    }
+    .avatar-glow {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 40px;
+      background: var(--yellow);
+      filter: blur(28px);
+      opacity: 0.25;
+      z-index: -1;
+    }
+
+    .name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 88px;
+      letter-spacing: 8px;
+      color: var(--yellow);
+      line-height: 1;
+      text-shadow: 0 0 40px rgba(255,214,0,0.25);
+      margin-bottom: 4px;
+    }
+
+    .tag {
+      font-size: 13px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--yellow-dim);
+      font-weight: 300;
+      margin-bottom: 48px;
+    }
+
+    /* Divider */
+    .divider {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--gray); }
+    .divider-label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--yellow);
+      text-transform: uppercase;
+    }
+
+    /* About */
+    .about-card {
+      width: 100%;
+      background: var(--deep);
+      border-left: 3px solid var(--yellow);
+      padding: 28px 32px;
+      margin-bottom: 48px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.8s ease 0.25s both;
+    }
+    .about-card::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 60px; height: 60px;
+      background: var(--yellow-glow);
+      filter: blur(20px);
+    }
+    .about-text {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+    .about-text span {
+      color: var(--yellow);
+    }
+
+    /* Social links */
+    .socials {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: fadeUp 0.8s ease 0.38s both;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 18px 28px;
+      background: var(--deep);
+      border: 1px solid var(--gray);
+      text-decoration: none;
+      color: var(--white);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      clip-path: polygon(0 0, 100% 0, 97% 100%, 0% 100%);
+    }
+    .social-link::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--yellow);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.3s ease;
+    }
+    .social-link:hover {
+      background: #1a1a00;
+      border-color: var(--yellow);
+      color: var(--yellow);
+      transform: translateX(4px);
+    }
+    .social-link:hover::before { transform: scaleY(1); }
+
+    .social-icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .social-arrow {
+      margin-left: auto;
+      font-size: 20px;
+      opacity: 0.5;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .social-link:hover .social-arrow {
+      opacity: 1;
+      transform: translateX(4px);
+    }
+
+    /* Handle text */
+    .social-handle {
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      opacity: 0.6;
+      display: block;
+      margin-top: 2px;
+      color: var(--white);
+    }
+    .social-link:hover .social-handle { color: var(--yellow); opacity: 0.8; }
+
+    /* Footer */
+    .footer {
+      margin-top: 64px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: fadeUp 0.8s ease 0.5s both;
+    }
+
+    /* Animations */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cursor custom */
+    body { cursor: crosshair; }
+    a { cursor: crosshair; }
+  </style>
+</head>
+<body>
+
+  <div class="stripe"></div>
+  <div class="stripe2"></div>
+
+  <div class="container">
+
+    <!-- Top header bar -->
+    <div class="header">
+      <div class="header-dot"></div>
+      <div class="header-line"></div>
+      <span style="font-size:11px;letter-spacing:5px;color:var(--yellow-dim);text-transform:uppercase;">Profile</span>
+      <div class="header-line"></div>
+      <div class="header-dot"></div>
+    </div>
+
+    <!-- Profile -->
+    <div class="profile">
+      <div class="avatar-wrapper">
+        <!-- Fotoğrafı buraya yükle: src="kxxn.jpg" olarak değiştir -->
+        <img class="avatar" src="1777568425658_image.png" alt="KXXN" onerror="this.style.background='#222';this.style.display='flex'"/>
+        <div class="avatar-glow"></div>
+      </div>
+
+      <div class="name">KXXN</div>
+      <div class="tag">// Official Profile</div>
+    </div>
+
+    <!-- About -->
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-label">Hakkımda</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="about-card">
+      <div class="about-text">
+        <span>CXX Family</span>
+      </div>
+    </div>
+
+    <!-- Social -->
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-label">Sosyal Medya</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="socials">
+
+      <!-- Instagram -->
+      <a class="social-link" href="https://instagram.com/kxxncxxq" target="_blank" rel="noopener">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.8"/>
+          <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.8"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+        </svg>
+        <div>
+          Instagram
+          <span class="social-handle">@kxxncxxq</span>
+        </div>
+        <span class="social-arrow">→</span>
+      </a>
+
+      <!-- TikTok -->
+      <a class="social-link" href="https://tiktok.com/@kxxn_cxx" target="_blank" rel="noopener">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          TikTok
+          <span class="social-handle">@kxxn_cxx</span>
+        </div>
+        <span class="social-arrow">→</span>
+      </a>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="header-line"></div>
+      <span style="font-size:11px;letter-spacing:4px;color:var(--gray);text-transform:uppercase;">KXXN © 2026</span>
+      <div class="header-line"></div>
+    </div>
+
+  </div>
+</body>
+</html>
